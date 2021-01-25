@@ -1,0 +1,66 @@
+# Locale
+locale: "en-us"
+
+# Debug mode enabled?
+debug: false
+
+# You can use PlaceholderAPI placeholders here!
+# Placeholders: %region%, %x%, %y%, %z%, %world%, %boss_id%, %boss_name%, %damagers_count%
+default summary message:
+
+  # If set to true the places will be shown in Roman letters so 1 will become I and so on
+  roman numbers: true
+
+  # Default position color if not found in colors
+  default color: "&c"
+
+  # Custom colors for positions
+  # Format: POS:COLOR
+  colors:
+    - "1:&4"
+    - "2:&a"
+    - "3:&2"
+
+  message:
+    center: true
+    lines:
+      1: "&2&l------------"
+      2: " "
+      3: "&2&l%boss_name% &7murdered!"
+      4: " &7Total &a%damagers_count%&7 players participated"
+      5: " &7Total Damage: &a%total_damage%"
+      6: " "
+      7: "&a&lSUMMARY"
+      8: " "
+      9: "{DAMAGER_PLACEHOLDER}&e%position_color%%position% %damager_name% %damage% %damage_percentage%%"
+      10: " "
+      11: "&2&l------------"
+
+# You can use PlaceholderAPI placeholders here!
+# Placeholders: %region%, %x%, %y%, %z%, %world%, %boss_id%, %boss_name%
+default spawn message:
+
+  # Boss Spawn Message
+  # TELPORT_MESSAGE will be sent if player has the permission and teleportMessage is enabled in boss, otherwise it won't be sent.
+  message:
+    type: chat
+    center: true
+    lines:
+      1: "&e&l------- &e%boss_name% &7has spawned in &e%boss_region%"
+      2: " &e&l* &7X: &e%boss_x%"
+      3: " &e&l* &7Y: &e%boss_y%"
+      4: " &e&l* &7Z: &e%boss_z%"
+      5: " "
+      6: "{TELEPORT_MESSAGE}"
+
+  # Teleport message
+  teleport message:
+    type: chat
+    text: "&e&l[Teleport]"
+    hover: "&eClick to teleport"
+
+    command: "be handleTeleport %boss_uuid%"
+
+  # How many times can one message be used for one player?
+  # Set -1 for infinite
+  teleport limit: 5

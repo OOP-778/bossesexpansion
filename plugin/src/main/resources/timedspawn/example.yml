@@ -1,0 +1,58 @@
+# How often should it execute this timed spawn?
+# This is optional value
+# You can use days(1), weeks(1,2,3,4), months(1,2,3,4)
+# Examples:
+# days(2) ~ will run every 2 days
+# weeks(2, 1) ~ will run every 2 weeks at the first day of the week
+# months(2, 3, 1) ~ will run every 2 months third week first day
+every: "days(1)"
+
+# Time zone
+# You can define any timezone
+# Or you can remove this value
+# And System timezone will be used
+timezone: "UTC+3"
+
+# Time that it will run at if the `every`
+# Is not defined, it will then act as how often it will run
+# If 'every' is defined, it will run at that specific time
+# The time is offset starting from 00:00 so 2pm would be 14h
+time: "14h"
+
+# Spawn points
+points:
+  # There's one type: worldguard
+  type: worldguard
+
+  # Value of the defined type
+  value: "warzone"
+
+# Which bosses will it spawn?
+# You can also use boss(name, amount) to automatically find bosses
+bosses:
+  - "boss[skeletalKing, rand(2, 6)]"
+
+# Should all bosses be grouped into one?
+# Which would end up into single actions executed
+# Also the actions will execute if grouping is enabled only
+# When all of the spawned bosses are dead
+grouping:
+  enabled: false
+
+  # Name of the boss that will be the main boss
+  # That actions will run on & rewards
+  # If there's multiple of the same type, it will
+  # Then use the first one as the lead
+  lead: "skeletalKing"
+
+# Broadcasts when x time is left before spawning
+broadcasts:
+  "1m":
+    to: "all"
+    type: title
+
+    title: "&cStarting &oSkeletalKnight event"
+    sub title: "&4In warzone '/warp warzone'"
+    fade in: 20
+    stay: 30
+    fade out: 20

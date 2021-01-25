@@ -1,0 +1,38 @@
+# Which bosses this reward can be chosen in
+bosses:
+  # Filter method: blacklist, whitelist, off
+  filter: off
+
+  # List of bosses as their file names without extensions
+  list: []
+
+# Chance from 0 to 1
+chance: 0.005
+
+# Places this reward can be chosen in
+# Formats: min(num), num, range(2, 10), any
+places: "any"
+
+actions:
+  "message":
+    type: message
+    data:
+      message: "&cYou have won a special diamond! as you were placed in {damager_place} place!"
+
+  "give diamond":
+    type: give
+    data:
+      item:
+        material: diamond
+        display name: "&5&l&0Special Diamond"
+        lore:
+          - "&7&o\"This diamond holds"
+          - "&7&oSpecial powers\""
+          - " "
+          - "&dIt's useless!"
+
+  "command":
+    type: command
+    data:
+      executer: console
+      command: "give {damager_name} diamond"

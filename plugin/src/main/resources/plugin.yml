@@ -1,0 +1,7 @@
+name: BossesExpansion
+main: com.honeybeedev.bossesexpansion.plugin.BossesExpansion
+version: 1.0
+author: OOP-778 @ honeybeedev.com
+
+depend:
+  - MythicMobs

@@ -1,0 +1,77 @@
+# there's three actions
+# spawn: when boss is spawned
+# summary: when boss dies and it shows the summary of damage done
+# rewards: when boss dies and it gives out the rewards
+# scoreboard: when player is near the boss it will show to the receivers the scoreboard
+actions:
+  spawn:
+    # Should it sent the teleport message
+    # With the permission defined below or if not defined to all
+    send teleport message: true
+
+    # Teleport permission
+    teleport permission: "be.defaultTeleportGroup"
+
+  summary:
+    # How many damagers there should be for the summary to show!
+    # -1 for no limit
+    damagers required: 2
+
+  # Configure the rewards
+  rewards:
+    # Configure rewards per place
+    # Or just use * as default
+    "1":
+      # How much rewards can this place receive?
+      amount: 10
+
+    "*":
+      # How much rewards can this place receive?
+      amount: 1
+
+  "scoreboard":
+    # To what are we applying the scoreboard?
+    to: "players in 20 radius"
+
+    # Title of the scoreboard
+    title: "%boss_name%"
+
+    # Apply to x damagers
+    top damagers: 5
+
+    # The lines of the scoreboard
+    lines:
+      - "&a&lSTATS"
+      - " &7HP: &a%boss_health%"
+      - " "
+      - "&a&lTop Damagers"
+      - "{DAMAGER_TEMPLATE}%damager_name% %damager_damage%"
+
+# If action contains own filters, this will be ignored
+# Global filters for each action
+# There's three filters: regions, worlds, bosses
+filters:
+  # Region filter
+  region:
+    # Filter method: blacklist, whitelist, off
+    filter: off
+
+    # List of values for the filter
+    list: []
+
+  # Worlds filter
+  world:
+    # Filter method: blacklist, whitelist, off
+    filter: off
+
+    # List of values for the filter
+    list: []
+
+  # Bosses filter
+  boss:
+    # Filter method: blacklist, whitelist, off
+    filter: off
+
+    # List of bosses names
+    list:
+      - "*"
