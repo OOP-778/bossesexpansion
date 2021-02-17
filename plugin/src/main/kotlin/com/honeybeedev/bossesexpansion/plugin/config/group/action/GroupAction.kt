@@ -6,7 +6,8 @@ import com.oop.orangeengine.yaml.interfaces.Valuable
 enum class GroupAction(val supplier: (ConfigSection) -> AbstractAction) {
     SPAWN({ SpawnAction(it) }),
     SUMMARY({ SummaryAction(it) }),
-    REWARDS({ RewardsAction(it) });
+    REWARDS({ RewardsAction(it) }),
+    SCOREBOARD( { ScoreboardAction(it) });
 
     companion object {
         fun load(config: Valuable): List<AbstractAction> {

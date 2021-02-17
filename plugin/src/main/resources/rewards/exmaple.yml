@@ -1,10 +1,30 @@
-# Which bosses this reward can be chosen in
-bosses:
-  # Filter method: blacklist, whitelist, off
-  filter: off
+# Global filters for each action
+# There's three filters: region, world, boss
+filters:
+  # Region filter
+  region:
+    # Filter method: blacklist, whitelist, off
+    filter: off
 
-  # List of bosses as their file names without extensions
-  list: []
+    # List of values for the filter
+    list: []
+
+  # Worlds filter
+  world:
+    # Filter method: blacklist, whitelist, off
+    filter: off
+
+    # List of values for the filter
+    list: []
+
+  # Bosses filter
+  boss:
+    # Filter method: blacklist, whitelist, off
+    filter: off
+
+    # List of bosses names
+    list:
+      - "*"
 
 # Chance from 0 to 1
 chance: 0.005
@@ -17,14 +37,14 @@ actions:
   "message":
     type: message
     data:
-      message: "&cYou have won a special diamond! as you were placed in {damager_place} place!"
+      message: "&cYou have won a special diamond! as you were placed in {damager_position} place!"
 
   "give diamond":
-    type: give
+    type: item
     data:
       item:
         material: diamond
-        display name: "&5&l&0Special Diamond"
+        display name: "&5&lSpecial Diamond"
         lore:
           - "&7&o\"This diamond holds"
           - "&7&oSpecial powers\""

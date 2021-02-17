@@ -8,11 +8,16 @@ import com.oop.orangeengine.yaml.ConfigSection
 class RewardsAction(section: ConfigSection) : AbstractAction(section) {
     override val actionName: String = "rewards"
 
-    val places: MutableSet<OPair<WrappedNumber, Int>> = linkedSetOf()
+    val places: MutableSet<OPair<WrappedNumber, WrappedNumber>> = linkedSetOf()
+    var receivers: MutableSet<WrappedNumber> = linkedSetOf()
 
     init {
         section.sections.values.forEach {
-            places.add(OPair(parseNumber(it.key), it.getAs("amount")))
+            places.add(OPair(parseNumber(it.key), parseNumber(it.getAs("amount", String::class.java))))
         }
+
+        section.getAs<List<String>>("receivers")
+            .map { parseNumber(it) }
+            .forEach { receivers.add(it) }
     }
 }

@@ -9,6 +9,7 @@ import com.honeybeedev.bossesexpansion.plugin.util.damageFormat
 import com.oop.orangeengine.main.util.data.pair.OPair
 import com.oop.orangeengine.message.OMessage
 import com.oop.orangeengine.message.Replaceable
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import kotlin.math.round
 import kotlin.reflect.KClass
@@ -27,7 +28,10 @@ object PlaceholderController {
         add<BBoss>("boss_region") { it.spawnRegion?.id ?: "None" }
         add<BBoss>("boss_damage") { damageFormat.format(it.totalDamage) }
         add<BBoss>("boss_damagers") { it.damageMap.size }
+        add<BBoss>("boss_health") { damageFormat.format((it.entity as LivingEntity).health) }
 
+
+        add<BossDamager>("damager_position") {it.position.toInt()}
         add<BossDamager>("damager_name") { it.offlinePlayer.name }
         add<BossDamager>("damager_damage") { damageFormat.format(it.damage) }
         add<BossDamager>("damager_damage_percentage") { round(it.damage / it.boss.totalDamage * 100).toInt() }
@@ -39,14 +43,14 @@ object PlaceholderController {
     private inline fun <reified T> add(placeholder: String, noinline handler: (T) -> Any) {
         placeholders.computeIfAbsent(
             T::class
-        ) { Sets.newHashSet() }.add(OPair(placeholder, handler) as OPair<String, (Any) -> String>)
+        ) { Sets.newHashSet() }.add(OPair(placeholder, { o -> handler(o as T).toString() }))
     }
 
     fun parsePlaceholders(vararg objs: Any): Set<OPair<String, String>> {
         val parsed: MutableSet<OPair<String, String>> = hashSetOf()
         for (obj in objs)
             parsed.addAll(
-                findPlaceholdersFor(obj).map { OPair(it.first, it.second.invoke(obj)) }
+                findPlaceholdersFor(obj).map { OPair("%${it.first}%", it.second.invoke(obj)) }
             )
         return parsed
     }
@@ -94,7 +98,7 @@ object PlaceholderController {
         return text
     }
 
-    fun <T : Replaceable<T>> replaceMessage(message: T, vararg objects: Any): T {
+    fun <T : Replaceable<*>> replaceMessage(message: T, vararg objects: Any): T {
         objects.forEach {
             findPlaceholdersFor(it)
                 .forEach { pl ->

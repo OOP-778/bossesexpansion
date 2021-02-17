@@ -17,7 +17,8 @@ fun executeTask(
     delay: Int = -1,
     async: Boolean = false,
     repeat: Boolean = false,
-    consumer: (OTask) -> Unit
+    consumer: (OTask) -> Unit,
+
 ): OTask {
     val task = OTask()
     task.apply {

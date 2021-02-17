@@ -19,6 +19,10 @@ actions:
 
   # Configure the rewards
   rewards:
+    # Places that will receive the rewards
+    receivers:
+      - "range(1, 3)"
+
     # Configure rewards per place
     # Or just use * as default
     "1":
@@ -37,7 +41,7 @@ actions:
     title: "%boss_name%"
 
     # Apply to x damagers
-    top damagers: 5
+    show damagers: 5
 
     # The lines of the scoreboard
     lines:
@@ -45,7 +49,7 @@ actions:
       - " &7HP: &a%boss_health%"
       - " "
       - "&a&lTop Damagers"
-      - "{DAMAGER_TEMPLATE}%damager_name% %damager_damage%"
+      - " {DAMAGER_TEMPLATE}&4%damager_position% &c%damager_name%: %damager_damage%"
 
 # If action contains own filters, this will be ignored
 # Global filters for each action

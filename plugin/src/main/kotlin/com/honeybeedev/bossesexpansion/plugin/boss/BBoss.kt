@@ -15,8 +15,7 @@ data class BBoss(val entity: Entity, val _provider: BossProvider) : Boss {
     val children: Queue<Entity> = LinkedList()
     var bossGroup: BossGroup? = null
 
-    val damageMap: MutableMap<UUID, BossDamager> = ConcurrentHashMap()
-    val spawnCause: BossSpawnType = BossSpawnType.EGG
+    var damageMap: MutableMap<UUID, BossDamager> = ConcurrentHashMap()
     private var _totalDamage: Double = 0.0
 
     var displayName: String =
@@ -36,4 +35,20 @@ data class BBoss(val entity: Entity, val _provider: BossProvider) : Boss {
     override fun getProvider(): BossProvider = _provider
     override fun getTotalDamage(): Double = _totalDamage
     override fun getLocation(): Location = entity.location
+    override fun getUUID(): UUID = entity.uniqueId
+
+    fun sortDamagers(): Map<UUID, BossDamager> {
+        damageMap = damageMap.entries
+            .sortedByDescending { it.value.damage }
+            .toList()
+            .associateBy({ it.key }, { it.value })
+            .toMutableMap()
+
+        // Set positions for boss damagers
+        damageMap
+            .entries
+            .forEachIndexed { pos, entry -> entry.value.position.setValue(pos+1) }
+
+        return damageMap
+    }
 }

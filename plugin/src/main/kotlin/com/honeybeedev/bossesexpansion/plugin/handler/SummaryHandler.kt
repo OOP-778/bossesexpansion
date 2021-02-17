@@ -12,7 +12,7 @@ import com.oop.orangeengine.message.impl.chat.InsertableList
 import org.bukkit.Bukkit
 import kotlin.math.round
 
-object DeathHandler : BEComponent {
+object SummaryHandler : BEComponent {
     init {
         dispatchListen<BossDeathEvent> {
             // If boss group is not found, return
@@ -39,11 +39,7 @@ object DeathHandler : BEComponent {
 
                 // Parse damagers
                 val damagerLines = arrayListOf<ChatLine>()
-                val sortedDamages = (boss as BBoss).damageMap
-                    .toList()
-                    .sortedBy { p -> p.second.damage }
-                    .reversed()
-                    .toMap()
+                val sortedDamages = (boss as BBoss).sortDamagers()
 
                 val totalDamage = boss.totalDamage
 
@@ -72,7 +68,6 @@ object DeathHandler : BEComponent {
 
                 for (onlinePlayer in Bukkit.getOnlinePlayers())
                     summaryMessage.send(onlinePlayer)
-
             }
         }
     }

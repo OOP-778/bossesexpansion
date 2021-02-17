@@ -7,9 +7,7 @@ import com.honeybeedev.bossesexpansion.plugin.controller.BossProviderController
 import com.honeybeedev.bossesexpansion.plugin.controller.ConfigController
 import com.honeybeedev.bossesexpansion.plugin.controller.HookController
 import com.honeybeedev.bossesexpansion.plugin.event.BEventDispatcher
-import com.honeybeedev.bossesexpansion.plugin.handler.DamageHandler
-import com.honeybeedev.bossesexpansion.plugin.handler.DeathHandler
-import com.honeybeedev.bossesexpansion.plugin.handler.SpawnHandler
+import com.honeybeedev.bossesexpansion.plugin.handler.*
 import com.honeybeedev.bossesexpansion.plugin.hook.hooks.MythicMobsHook
 import com.honeybeedev.bossesexpansion.plugin.tasks.TimedSpawnerTask
 import com.oop.orangeengine.main.plugin.EnginePlugin
@@ -42,7 +40,9 @@ class BossesExpansion : EnginePlugin(), com.honeybeedev.bossesexpansion.api.Boss
 
         SpawnHandler
         DamageHandler
-        DeathHandler
+        SummaryHandler
+        RewardHandler
+        ScoreboardHandler
 
         CommandRegistry
 

@@ -1,5 +1,6 @@
 package com.honeybeedev.bossesexpansion.plugin.config.message
 
+import com.honeybeedev.bossesexpansion.plugin.util.ReceiversSuppliers
 import com.oop.orangeengine.message.OMessage
 import com.oop.orangeengine.message.YamlMessage
 import com.oop.orangeengine.yaml.ConfigSection
@@ -14,7 +15,9 @@ class BEMessage() {
     constructor(section: ConfigSection) : this() {
         message = YamlMessage.load(section)
         receivers = { Bukkit.getOnlinePlayers() }
-        section.ifValuePresent("receivers", String::class.java) { ReceiversSuppliers.parseSupplier(it) }
+        section.ifValuePresent("receivers", String::class.java) {
+            receivers = ReceiversSuppliers.parseSupplier(it)
+        }
     }
 
     fun send(location: Location?, modifier: ((OMessage<*>).() -> Unit)? = null) {
