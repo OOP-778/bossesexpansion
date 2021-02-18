@@ -1,19 +1,19 @@
 package com.honeybeedev.bossesexpansion.plugin.handler
 
 import com.google.common.collect.Maps
-import com.honeybeedev.bossesexpansion.api.event.BossDeathEvent
-import com.honeybeedev.bossesexpansion.api.event.BossSpawnEvent
+import com.honeybeedev.bossesexpansion.api.event.boss.BossDeathEvent
+import com.honeybeedev.bossesexpansion.api.event.boss.BossSpawnEvent
 import com.honeybeedev.bossesexpansion.plugin.boss.BBoss
 import com.honeybeedev.bossesexpansion.plugin.boss.BossScoreboard
 import com.honeybeedev.bossesexpansion.plugin.config.group.action.ScoreboardAction
-import com.honeybeedev.bossesexpansion.plugin.util.BEComponent
+import com.honeybeedev.bossesexpansion.plugin.player.PlayersController
+import com.honeybeedev.bossesexpansion.plugin.util.PluginComponent
 import com.honeybeedev.bossesexpansion.plugin.util.dispatchListen
 import com.honeybeedev.bossesexpansion.plugin.util.executeTask
-import com.oop.orangeengine.main.task.OTask
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-object ScoreboardHandler : BEComponent {
+object ScoreboardHandler : PluginComponent {
     private val scoreboardMap: MutableMap<UUID, BossScoreboard> = Maps.newConcurrentMap()
 
     init {
@@ -43,6 +43,11 @@ object ScoreboardHandler : BEComponent {
         // Scoreboard end listen
         dispatchListen<BossDeathEvent> {
             scoreboardMap[boss.uuid]?.let {
+                it.scoreboard.viewers.forEach {
+                    val expansionPlayer = PlayersController
+                        .get(it.uniqueId)
+                    expansionPlayer.currentScoreboard = null
+                }
                 it.scoreboard.remove()
                 scoreboardMap.remove(boss.uuid)
             }
