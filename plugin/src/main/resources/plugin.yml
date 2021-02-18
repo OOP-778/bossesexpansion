@@ -5,3 +5,6 @@ author: OOP-778 @ honeybeedev.com
 
 depend:
   - MythicMobs
+
+softdepend:
+  - WorldGuard
