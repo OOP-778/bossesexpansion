@@ -10,6 +10,7 @@ import org.bukkit.ChunkSnapshot
 import org.bukkit.Location
 import org.bukkit.World
 import org.codemc.worldguardwrapper.WorldGuardWrapper
+import org.codemc.worldguardwrapper.region.IWrappedRegion
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ThreadLocalRandom
 import java.util.stream.IntStream
@@ -20,11 +21,12 @@ class WGPointsProvider(val section: ConfigSection): PointsProvider(section) {
     val world: World
     val maxPoint: Location
     val minPoint: Location
+    var region: IWrappedRegion
 
     private val regionName: String = section.getAs("value")
 
     init {
-        val region = WorldGuardWrapper.getInstance().regions
+        region = WorldGuardWrapper.getInstance().regions
             .firstOrNull { it.id.toString().contentEquals(regionName) }
             ?: throw IllegalStateException("Failed to find region by $regionName")
 
@@ -59,7 +61,7 @@ class WGPointsProvider(val section: ConfigSection): PointsProvider(section) {
                     .parallel()
                     .forEach {
                         if (mBreak.booleanValue()) return@forEach
-                        for (tried in 0..((amount / snapshots.size) * 2)) {
+                        for (tried in 0..((snapshots.size / amount) * 2)) {
                             if (mBreak.booleanValue()) return@forEach
 
                             val chunk = snapshots[ThreadLocalRandom.current().nextInt(0, snapshots.size - 1)]
@@ -80,8 +82,10 @@ class WGPointsProvider(val section: ConfigSection): PointsProvider(section) {
 
                                 synchronized(mBreak) {
                                     val location = Location(world, worldX.toDouble(), y.toDouble(), worldZ.toDouble())
+                                    if (!region.contains(location)) return@synchronized
+
                                     if (!mBreak.booleanValue() && !points.contains(location)) {
-                                        points.add(Location(world, worldX.toDouble(), y.toDouble(), worldZ.toDouble()))
+                                        points.add(location)
 
                                         if (points.size == amount) {
                                             mBreak.setValue(true)
