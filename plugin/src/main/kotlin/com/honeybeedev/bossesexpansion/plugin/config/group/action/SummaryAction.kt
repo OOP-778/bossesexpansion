@@ -13,7 +13,8 @@ class SummaryAction(section: ConfigSection) : AbstractAction(section) {
 
     init {
         if ("damagers required" !in section.values)
-            damagersRequired = section.set("damagers required", damagersRequired).getAs(Int::class.java)
+            damagersRequired =
+                section.set("damagers required", damagersRequired).getAs(Int::class.java)
 
         summaryMessage = if ("summary message" in section.sections)
             SummaryMessage(section.sections["summary message"])
@@ -22,6 +23,8 @@ class SummaryAction(section: ConfigSection) : AbstractAction(section) {
     }
 
     override fun accepts(boss: BBoss): Boolean {
-        return ((boss.damageMap.size < damagersRequired) or (damagersRequired == -1)) and super.accepts(boss)
+        return ((boss.damageMap.size < damagersRequired) or (damagersRequired == -1)) and super.accepts(
+            boss
+        )
     }
 }

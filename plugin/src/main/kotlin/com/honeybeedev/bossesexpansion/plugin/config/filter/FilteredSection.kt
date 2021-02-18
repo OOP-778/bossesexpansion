@@ -9,7 +9,9 @@ open class FilteredSection(
 ) : ConfigSerializeable {
     override fun load(section: ConfigSection) {
         section.ifValuePresent("filter", String::class.java) { method = FilterMethod.match(it) }
-        section.ifValuePresent("list", MutableList::class.java) { rawList = it as MutableList<String> }
+        section.ifValuePresent("list", MutableList::class.java) {
+            rawList = it as MutableList<String>
+        }
     }
 
     override fun save(section: ConfigSection) {

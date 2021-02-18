@@ -16,11 +16,13 @@ data class BossGroup(
 ) : GroupFilterable {
     init {
         loadFiltersFrom(config)
-        actions.putAll(GroupAction.load(config.createSection("actions")).map { Pair(it::class, it) })
+        actions.putAll(
+            GroupAction.load(config.createSection("actions")).map { Pair(it::class, it) })
     }
 
     constructor(id: String) : this({
-        val groupsFolder = File(BossesExpansion.instance!!.dataFolder.toPath().toString() + "/groups")
+        val groupsFolder =
+            File(BossesExpansion.instance!!.dataFolder.toPath().toString() + "/groups")
         val createIfNotExists = OFile(File(groupsFolder, "$id.yml")).createIfNotExists()
         Config(createIfNotExists)
     }())

@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ThreadLocalRandom
 import java.util.stream.IntStream
 
-class WGPointsProvider(val section: ConfigSection): PointsProvider(section) {
+class WGPointsProvider(val section: ConfigSection) : PointsProvider(section) {
     val points: MutableSet<Location> = Sets.newConcurrentHashSet()
 
     val world: World
@@ -31,8 +31,10 @@ class WGPointsProvider(val section: ConfigSection): PointsProvider(section) {
             ?: throw IllegalStateException("Failed to find region by $regionName")
 
         world = region.selection.world
-        maxPoint = Location(world, region.maximumPoint.x, region.maximumPoint.y, region.maximumPoint.z)
-        minPoint = Location(world, region.minimumPoint.x, region.minimumPoint.y, region.minimumPoint.z)
+        maxPoint =
+            Location(world, region.maximumPoint.x, region.maximumPoint.y, region.maximumPoint.z)
+        minPoint =
+            Location(world, region.minimumPoint.x, region.minimumPoint.y, region.minimumPoint.z)
     }
 
     override fun provide(parallel: Boolean, amount: Int): CompletableFuture<Collection<Location>> {
@@ -49,7 +51,9 @@ class WGPointsProvider(val section: ConfigSection): PointsProvider(section) {
 
             val snapshots: MutableList<ChunkSnapshot> = arrayListOf()
             chunkPairsBetween.forEach {
-                snapshots.add(world.getChunkAt(it.first, it.second).getChunkSnapshot(true, false, false))
+                snapshots.add(
+                    world.getChunkAt(it.first, it.second).getChunkSnapshot(true, false, false)
+                )
             }
 
             val start = System.currentTimeMillis()
@@ -64,13 +68,15 @@ class WGPointsProvider(val section: ConfigSection): PointsProvider(section) {
                         for (tried in 0..((snapshots.size / amount) * 2)) {
                             if (mBreak.booleanValue()) return@forEach
 
-                            val chunk = snapshots[ThreadLocalRandom.current().nextInt(0, snapshots.size - 1)]
+                            val chunk = snapshots[ThreadLocalRandom.current()
+                                .nextInt(0, snapshots.size - 1)]
 
                             val randomX = ThreadLocalRandom.current().nextInt(0, 16)
                             val randomZ = ThreadLocalRandom.current().nextInt(0, 16)
 
                             val highestBlockYAt = chunk.getHighestBlockYAt(randomX, randomZ)
-                            var underType = chunk.getBlockType(randomX, highestBlockYAt - 1, randomZ)
+                            var underType =
+                                chunk.getBlockType(randomX, highestBlockYAt - 1, randomZ)
 
                             if (!underType.isSolid)
                                 continue
@@ -81,7 +87,12 @@ class WGPointsProvider(val section: ConfigSection): PointsProvider(section) {
                                 val worldZ = (chunk.z * 16) + randomZ
 
                                 synchronized(mBreak) {
-                                    val location = Location(world, worldX.toDouble(), y.toDouble(), worldZ.toDouble())
+                                    val location = Location(
+                                        world,
+                                        worldX.toDouble(),
+                                        y.toDouble(),
+                                        worldZ.toDouble()
+                                    )
                                     if (!region.contains(location)) return@synchronized
 
                                     if (!mBreak.booleanValue() && !points.contains(location)) {

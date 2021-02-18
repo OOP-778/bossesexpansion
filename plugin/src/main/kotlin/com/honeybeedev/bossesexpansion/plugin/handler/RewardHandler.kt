@@ -1,16 +1,16 @@
 package com.honeybeedev.bossesexpansion.plugin.handler
 
-import com.honeybeedev.bossesexpansion.api.event.BossDeathEvent
+import com.honeybeedev.bossesexpansion.api.event.boss.BossDeathEvent
 import com.honeybeedev.bossesexpansion.plugin.BossesExpansion
 import com.honeybeedev.bossesexpansion.plugin.boss.BBoss
 import com.honeybeedev.bossesexpansion.plugin.config.group.action.RewardsAction
 import com.honeybeedev.bossesexpansion.plugin.config.reward.BeReward
-import com.honeybeedev.bossesexpansion.plugin.util.BEComponent
+import com.honeybeedev.bossesexpansion.plugin.util.PluginComponent
 import com.honeybeedev.bossesexpansion.plugin.util.RepeatableQueue
 import com.honeybeedev.bossesexpansion.plugin.util.dispatchListen
 import java.util.concurrent.ThreadLocalRandom
 
-object RewardHandler : BEComponent {
+object RewardHandler : PluginComponent {
     private const val maxTriesPerPlace = 1000
 
     init {

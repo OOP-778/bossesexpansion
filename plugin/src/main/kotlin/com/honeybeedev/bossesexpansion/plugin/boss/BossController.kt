@@ -1,22 +1,23 @@
-package com.honeybeedev.bossesexpansion.plugin.controller
+package com.honeybeedev.bossesexpansion.plugin.boss
 
 import com.google.common.collect.Maps
 import com.honeybeedev.bossesexpansion.api.BossesExpansionAPI
 import com.honeybeedev.bossesexpansion.api.boss.Boss
+import com.honeybeedev.bossesexpansion.api.boss.BossController
 import com.honeybeedev.bossesexpansion.api.boss.BossProvider
-import com.honeybeedev.bossesexpansion.api.controller.BossController
-import com.honeybeedev.bossesexpansion.api.event.BossChildrenSpawnEvent
-import com.honeybeedev.bossesexpansion.api.event.BossDeathEvent
-import com.honeybeedev.bossesexpansion.api.event.BossDespawnEvent
-import com.honeybeedev.bossesexpansion.api.event.BossSpawnEvent
-import com.honeybeedev.bossesexpansion.plugin.boss.BBoss
+import com.honeybeedev.bossesexpansion.api.event.boss.BossChildrenSpawnEvent
+import com.honeybeedev.bossesexpansion.api.event.boss.BossDeathEvent
+import com.honeybeedev.bossesexpansion.api.event.boss.BossDespawnEvent
+import com.honeybeedev.bossesexpansion.api.event.boss.BossSpawnEvent
+import com.honeybeedev.bossesexpansion.api.event.boss.pre.BossPreSpawnEvent
 import com.honeybeedev.bossesexpansion.plugin.event.BEventDispatcher
-import com.honeybeedev.bossesexpansion.plugin.util.BEComponent
+import com.honeybeedev.bossesexpansion.plugin.util.PluginComponent
+import com.honeybeedev.bossesexpansion.plugin.util.executeTask
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import java.util.*
 
-class BossController : BossController, BEComponent {
+class BossController : BossController, PluginComponent {
     val bosses = Maps.newConcurrentMap<UUID, BBoss>()
 
     override fun getBosses(): MutableSet<Boss> {
@@ -47,24 +48,40 @@ class BossController : BossController, BEComponent {
     }
 
     override fun onSpawn(entity: Entity, parent: Entity?, provider: BossProvider) {
-        if (parent != null) {
-            bosses[parent.uniqueId]?.let {
-                logger.printDebug("New Boss Children spawned of $it")
+        // Split the spawning into two parts, first of all wait half of second and call preSpawnEvent
+        // Then wait half of second and call spawnEvent
+
+        executeTask("delayed-pre-spawn-event-handling", delay = 500) {
+            val boss = BBoss(entity, provider)
+            val preSpawnEvent = BossPreSpawnEvent(boss)
+
+            // Call the pre spawn event
+            plugin.eventDispatcher.call(preSpawnEvent)
+
+            // If prespawn event is cancelled, we do not handle this entity
+            if (preSpawnEvent.isCancelled)
+                return@executeTask
+
+            executeTask("delayed-spawn-event-handling", delay = 500) spawntask@{
+                if (parent != null) {
+                    bosses[parent.uniqueId]?.let {
+                        logger.printDebug("New Boss Children spawned of $it")
+                        (BossesExpansionAPI.getPlugin().eventDispatcher as BEventDispatcher).call(
+                            BossChildrenSpawnEvent()
+                        )
+                        it.children.add(entity)
+                    }
+                    return@spawntask
+                }
+
+                logger.printDebug("New Boss Spawned $boss")
                 (BossesExpansionAPI.getPlugin().eventDispatcher as BEventDispatcher).call(
-                    BossChildrenSpawnEvent()
+                    BossSpawnEvent(boss as Boss)
                 )
-                it.children.add(entity)
+
+                bosses[entity.uniqueId] = boss
             }
-            return
         }
-
-        val boss = BBoss(entity, provider)
-        logger.printDebug("New Boss Spawned $boss")
-        (BossesExpansionAPI.getPlugin().eventDispatcher as BEventDispatcher).call(
-            BossSpawnEvent(boss as Boss)
-        )
-
-        bosses[entity.uniqueId] = boss
     }
 
     override fun onDespawn(entity: Entity) {

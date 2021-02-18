@@ -1,16 +1,16 @@
 package com.honeybeedev.bossesexpansion.plugin.handler
 
-import com.honeybeedev.bossesexpansion.api.event.BossSpawnEvent
+import com.honeybeedev.bossesexpansion.api.event.boss.BossSpawnEvent
 import com.honeybeedev.bossesexpansion.plugin.boss.BBoss
 import com.honeybeedev.bossesexpansion.plugin.config.group.action.SpawnAction
-import com.honeybeedev.bossesexpansion.plugin.controller.PlaceholderController.replaceMessage
-import com.honeybeedev.bossesexpansion.plugin.util.BEComponent
+import com.honeybeedev.bossesexpansion.plugin.util.Placeholders.replaceMessage
+import com.honeybeedev.bossesexpansion.plugin.util.PluginComponent
 import com.honeybeedev.bossesexpansion.plugin.util.dispatchListen
 import com.oop.orangeengine.message.impl.OChatMessage
 import com.oop.orangeengine.message.impl.chat.InsertableList
 import org.bukkit.ChatColor
 
-object SpawnHandler : BEComponent {
+object SpawnHandler : PluginComponent {
     init {
         // Assign group to the boss if present
         dispatchListen<BossSpawnEvent> {
@@ -38,7 +38,9 @@ object SpawnHandler : BEComponent {
                 val spawnMessage = it.spawnMessage!!.spawnMessage!!.message.clone() as OChatMessage
 
                 val teleportMessageLineIndex =
-                    spawnMessage.indexOf { ChatColor.stripColor(it.raw()!!).startsWith("{TELEPORT_MESSAGE}") }
+                    spawnMessage.indexOf {
+                        ChatColor.stripColor(it.raw()!!).startsWith("{TELEPORT_MESSAGE}")
+                    }
 
                 val messageWithoutTeleport = spawnMessage.clone()
 

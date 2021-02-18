@@ -1,4 +1,4 @@
-package com.honeybeedev.bossesexpansion.plugin.cmd.arg
+package com.honeybeedev.bossesexpansion.plugin.command.argument
 
 import com.oop.orangeengine.command.arg.CommandArgument
 import com.oop.orangeengine.command.arg.CommandArgument.ArgumentMapper

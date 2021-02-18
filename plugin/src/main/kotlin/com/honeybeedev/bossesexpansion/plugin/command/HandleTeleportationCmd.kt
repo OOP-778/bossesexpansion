@@ -1,12 +1,12 @@
-package com.honeybeedev.bossesexpansion.plugin.cmd
+package com.honeybeedev.bossesexpansion.plugin.command
 
 import com.honeybeedev.bossesexpansion.plugin.BossesExpansion
-import com.honeybeedev.bossesexpansion.plugin.cmd.arg.UUIDArg
+import com.honeybeedev.bossesexpansion.plugin.command.argument.UUIDArg
 import com.oop.orangeengine.command.OCommand
 import com.oop.orangeengine.main.task.StaticTask
 import java.util.*
 
-class CmdHandleTP : OCommand() {
+class HandleTeleportationCmd : OCommand() {
     init {
         label("handleTeleport")
         description("Handle teleportation of player to a boss")

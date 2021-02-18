@@ -11,7 +11,11 @@ object BEventDispatcher : EventDispatcher {
     private val listeners: MutableMap<KClass<out BEEvent>, MutableList<Pair<JavaPlugin, (BEEvent) -> Unit>>> =
         hashMapOf()
 
-    override fun <T : BEEvent> listen(listeningPlugin: JavaPlugin, eventClass: Class<T>, consumer: Consumer<T>) {
+    override fun <T : BEEvent> listen(
+        listeningPlugin: JavaPlugin,
+        eventClass: Class<T>,
+        consumer: Consumer<T>
+    ) {
         listeners
             .computeIfAbsent(eventClass.kotlin) { LinkedList() }
             .add(Pair(listeningPlugin) { consumer.accept(it as T) })

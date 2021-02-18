@@ -61,7 +61,7 @@ filters:
     filter: off
 
     # List of values for the filter
-    list: []
+    list: [ ]
 
   # Worlds filter
   world:
@@ -69,7 +69,7 @@ filters:
     filter: off
 
     # List of values for the filter
-    list: []
+    list: [ ]
 
   # Bosses filter
   boss:

@@ -13,7 +13,12 @@ class RewardsAction(section: ConfigSection) : AbstractAction(section) {
 
     init {
         section.sections.values.forEach {
-            places.add(OPair(parseNumber(it.key), parseNumber(it.getAs("amount", String::class.java))))
+            places.add(
+                OPair(
+                    parseNumber(it.key),
+                    parseNumber(it.getAs("amount", String::class.java))
+                )
+            )
         }
 
         section.getAs<List<String>>("receivers")

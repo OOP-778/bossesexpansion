@@ -30,20 +30,7 @@ points:
 # Which bosses will it spawn?
 # You can also use boss(name, amount) to automatically find bosses
 bosses:
-  - "boss[skeletalKing, rand(2, 6)]"
-
-# Should all bosses be grouped into one?
-# Which would end up into single actions executed
-# Also the actions will execute if grouping is enabled only
-# When all of the spawned bosses are dead
-grouping:
-  enabled: false
-
-  # Name of the boss that will be the main boss
-  # That actions will run on & rewards
-  # If there's multiple of the same type, it will
-  # Then use the first one as the lead
-  lead: "skeletalKing"
+  - "boss[skeletonKing, rand(2, 6)]"
 
 # Broadcasts when x time is left before spawning
 broadcasts:

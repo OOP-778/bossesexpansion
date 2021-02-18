@@ -1,12 +1,11 @@
-package com.honeybeedev.bossesexpansion.plugin.controller
+package com.honeybeedev.bossesexpansion.plugin.hook
 
-import com.honeybeedev.bossesexpansion.plugin.hook.Hook
-import com.honeybeedev.bossesexpansion.plugin.util.BEComponent
+import com.honeybeedev.bossesexpansion.plugin.util.PluginComponent
 import java.util.*
 import java.util.function.Consumer
 import kotlin.reflect.KClass
 
-class HookController : BEComponent {
+class HookController : PluginComponent {
     private val hooks: MutableMap<KClass<out Hook>, Hook> = HashMap()
 
     fun registerHooks(vararg hooks: () -> KClass<out Hook>) {
@@ -18,7 +17,7 @@ class HookController : BEComponent {
                     if (!hook.required) continue else throw IllegalStateException("Failed to hook into ${hook.pluginName} because it's not loaded and it is required!")
 
                 this.hooks[clazz] = hook
-                logger.print("Hooked into (${hook.pluginName}) version ${hook.plugin!!.description.version}")
+                logger.print("Hooked into (${hook.pluginName}) version ${hook.hookPlugin!!.description.version}")
             } catch (throwable: Throwable) {
                 if (throwable is IllegalStateException || throwable is NullPointerException) throw IllegalStateException(
                     "Failed to start HookController",

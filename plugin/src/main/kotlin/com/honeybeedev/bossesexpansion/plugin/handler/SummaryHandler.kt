@@ -1,10 +1,10 @@
 package com.honeybeedev.bossesexpansion.plugin.handler
 
-import com.honeybeedev.bossesexpansion.api.event.BossDeathEvent
+import com.honeybeedev.bossesexpansion.api.event.boss.BossDeathEvent
 import com.honeybeedev.bossesexpansion.plugin.boss.BBoss
 import com.honeybeedev.bossesexpansion.plugin.config.group.action.SummaryAction
-import com.honeybeedev.bossesexpansion.plugin.controller.PlaceholderController.replaceMessage
-import com.honeybeedev.bossesexpansion.plugin.util.BEComponent
+import com.honeybeedev.bossesexpansion.plugin.util.Placeholders.replaceMessage
+import com.honeybeedev.bossesexpansion.plugin.util.PluginComponent
 import com.honeybeedev.bossesexpansion.plugin.util.damageFormat
 import com.honeybeedev.bossesexpansion.plugin.util.dispatchListen
 import com.oop.orangeengine.message.impl.chat.ChatLine
@@ -12,7 +12,7 @@ import com.oop.orangeengine.message.impl.chat.InsertableList
 import org.bukkit.Bukkit
 import kotlin.math.round
 
-object SummaryHandler : BEComponent {
+object SummaryHandler : PluginComponent {
     init {
         dispatchListen<BossDeathEvent> {
             // If boss group is not found, return
@@ -35,7 +35,8 @@ object SummaryHandler : BEComponent {
                 val damagerPlaceholderLine = summaryMessage
                     .findLine { it.raw().contains("{DAMAGER_PLACEHOLDER}") }
                     .replace("{DAMAGER_PLACEHOLDER}", "")
-                val damagerPlaceholderLineIndex = summaryMessage.lineList().indexOf(damagerPlaceholderLine)
+                val damagerPlaceholderLineIndex =
+                    summaryMessage.lineList().indexOf(damagerPlaceholderLine)
 
                 // Parse damagers
                 val damagerLines = arrayListOf<ChatLine>()
@@ -45,7 +46,8 @@ object SummaryHandler : BEComponent {
 
                 var pos = 1
                 sortedDamages.forEach { (uuid, damage) ->
-                    val color = it.summaryMessage!!.colors!![pos] ?: it.summaryMessage!!.defaultColor
+                    val color =
+                        it.summaryMessage!!.colors!![pos] ?: it.summaryMessage!!.defaultColor
 
                     val damagerLine = damagerPlaceholderLine.clone()
                     println(damagerLine.raw())
@@ -54,7 +56,10 @@ object SummaryHandler : BEComponent {
                         .replace("%position_color%", color!!)
                         .replace("%damager_name%", Bukkit.getOfflinePlayer(uuid).name)
                         .replace("%damage%", damageFormat.format(damage.damage))
-                        .replace("%damage_percentage%", round(damage.damage / totalDamage * 100).toInt())
+                        .replace(
+                            "%damage_percentage%",
+                            round(damage.damage / totalDamage * 100).toInt()
+                        )
                     pos++
                     damagerLines.add(damagerLine)
                 }

@@ -1,10 +1,10 @@
-package com.honeybeedev.bossesexpansion.plugin.cmd
+package com.honeybeedev.bossesexpansion.plugin.command
 
 import com.honeybeedev.bossesexpansion.plugin.BossesExpansion
 import com.honeybeedev.bossesexpansion.plugin.constant.Lang
 import com.oop.orangeengine.command.OCommand
 
-class CmdReload : OCommand() {
+class ReloadCmd : OCommand() {
     init {
         label("reload")
         permission("be.reload")

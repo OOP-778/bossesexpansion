@@ -1,21 +1,20 @@
-package com.honeybeedev.bossesexpansion.plugin.controller
+package com.honeybeedev.bossesexpansion.plugin.util
 
 import com.google.common.collect.Maps
 import com.google.common.collect.Sets
 import com.honeybeedev.bossesexpansion.plugin.boss.BBoss
 import com.honeybeedev.bossesexpansion.plugin.boss.BossDamager
 import com.honeybeedev.bossesexpansion.plugin.config.timed.TimedSpawner
-import com.honeybeedev.bossesexpansion.plugin.util.damageFormat
 import com.oop.orangeengine.main.util.data.pair.OPair
-import com.oop.orangeengine.message.OMessage
 import com.oop.orangeengine.message.Replaceable
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import kotlin.math.round
 import kotlin.reflect.KClass
 
-object PlaceholderController {
-    private val placeholders: MutableMap<KClass<*>, MutableSet<OPair<String, (Any) -> String>>> = Maps.newHashMap()
+object Placeholders {
+    private val placeholders: MutableMap<KClass<*>, MutableSet<OPair<String, (Any) -> String>>> =
+        Maps.newHashMap()
 
     init {
         add<Player>("display_name") { it.displayName }
@@ -29,15 +28,22 @@ object PlaceholderController {
         add<BBoss>("boss_damage") { damageFormat.format(it.totalDamage) }
         add<BBoss>("boss_damagers") { it.damageMap.size }
         add<BBoss>("boss_health") { damageFormat.format((it.entity as LivingEntity).health) }
+        add<BBoss>("boss_with_children_health") {
+            damageFormat.format(
+                (it.entity as LivingEntity).health +
+                        it.children
+                            .map { (it as LivingEntity).health }
+                            .sum()
+            )
+        }
 
-
-        add<BossDamager>("damager_position") {it.position.toInt()}
+        add<BossDamager>("damager_position") { it.position.toInt() }
         add<BossDamager>("damager_name") { it.offlinePlayer.name }
         add<BossDamager>("damager_damage") { damageFormat.format(it.damage) }
         add<BossDamager>("damager_damage_percentage") { round(it.damage / it.boss.totalDamage * 100).toInt() }
 
-        add<TimedSpawner>("timedspawner_id") {it.config.file.file.nameWithoutExtension}
-        add<TimedSpawner>("timedspawner_left_complex") {it.left()}
+        add<TimedSpawner>("timedspawner_id") { it.config.file.file.nameWithoutExtension }
+        add<TimedSpawner>("timedspawner_left_complex") { it.left() }
     }
 
     private inline fun <reified T> add(placeholder: String, noinline handler: (T) -> Any) {

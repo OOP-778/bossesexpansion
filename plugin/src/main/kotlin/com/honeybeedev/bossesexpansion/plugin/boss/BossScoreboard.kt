@@ -8,7 +8,6 @@ import com.honeybeedev.bossesexpansion.plugin.util.damageFormat
 import com.oop.inteliframework.scoreboard.InteliScoreboard
 import com.oop.inteliframework.scoreboard.LineEntry
 import com.oop.orangeengine.main.Helper
-import com.oop.orangeengine.main.player.PlayerController
 import org.bukkit.entity.Player
 
 class BossScoreboard(val action: ScoreboardAction, val boss: BBoss) : PluginComponent {
@@ -66,12 +65,13 @@ class BossScoreboard(val action: ScoreboardAction, val boss: BBoss) : PluginComp
             lines.add {
                 var placeholderedLine: String = line
                 for (placeholder in placeholders) {
-                    placeholderedLine = placeholderedLine.replace(placeholder.key, placeholder.value)
+                    placeholderedLine =
+                        placeholderedLine.replace(placeholder.key, placeholder.value)
                 }
                 placeholderedLine
             }
         }
-        scoreboard.linesObject.modify{ list ->
+        scoreboard.linesObject.modify { list ->
             list.clear()
             list.addAll(lines)
         }

@@ -8,11 +8,25 @@ data class Star<T : Any>(
     var isStar: Boolean = false,
     var value: T? = null
 ) {
-    protected constructor(parent: Star<T>, isStar: Boolean) : this(parent.clazz, parent.provider, isStar)
-    protected constructor(parent: Star<T>, value: T) : this(parent.clazz, parent.provider, false, value)
+    protected constructor(parent: Star<T>, isStar: Boolean) : this(
+        parent.clazz,
+        parent.provider,
+        isStar
+    )
+
+    protected constructor(parent: Star<T>, value: T) : this(
+        parent.clazz,
+        parent.provider,
+        false,
+        value
+    )
 
     fun parse(`object`: String): Star<T> {
-        return if (`object`.equals("*", ignoreCase = true) || `object`.equals("all", ignoreCase = true)) Star(
+        return if (`object`.equals("*", ignoreCase = true) || `object`.equals(
+                "all",
+                ignoreCase = true
+            )
+        ) Star(
             this,
             true
         ) else {

@@ -1,4 +1,3 @@
-
 rootProject.name = "bossesexpansion"
 
 include(":plugin")

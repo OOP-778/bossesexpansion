@@ -1,14 +1,14 @@
 package com.honeybeedev.bossesexpansion.plugin.handler
 
 import com.honeybeedev.bossesexpansion.plugin.BossesExpansion
-import com.honeybeedev.bossesexpansion.plugin.util.BEComponent
+import com.honeybeedev.bossesexpansion.plugin.util.PluginComponent
 import com.honeybeedev.bossesexpansion.plugin.util.listen
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 
-object DamageHandler : BEComponent {
+object DamageHandler : PluginComponent {
     init {
         listen<EntityDamageByEntityEvent> {
             val damager = findDamager(this)

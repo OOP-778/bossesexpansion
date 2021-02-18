@@ -2,7 +2,6 @@ package com.honeybeedev.bossesexpansion.plugin.config.reward
 
 import com.google.common.base.Preconditions
 import com.honeybeedev.bossesexpansion.plugin.boss.BossDamager
-import com.honeybeedev.bossesexpansion.plugin.config.filter.FilteredSection
 import com.honeybeedev.bossesexpansion.plugin.config.group.GroupFilter
 import com.honeybeedev.bossesexpansion.plugin.config.group.GroupFilterable
 import com.honeybeedev.bossesexpansion.plugin.config.group.StringStarSection
@@ -34,11 +33,18 @@ data class BeReward(val config: Config) : GroupFilterable {
                 actionsSection.sections.values.forEach {
                     it.ensureHasValues("type")
                     val type = it.getAs<String>("type").toLowerCase()
-                    Preconditions.checkArgument(type in ActionRegistry.actions, "Invalid Reward Action by $type")
-                    Preconditions.checkArgument(it.isSectionPresent("data"), "Failed to find data for action $type")
+                    Preconditions.checkArgument(
+                        type in ActionRegistry.actions,
+                        "Invalid Reward Action by $type"
+                    )
+                    Preconditions.checkArgument(
+                        it.isSectionPresent("data"),
+                        "Failed to find data for action $type"
+                    )
 
                     actions[type] =
-                        ActionRegistry.actions[it.getAs<String>("type").toLowerCase()]!!(it.getSection("data").get())
+                        ActionRegistry.actions[it.getAs<String>("type")
+                            .toLowerCase()]!!(it.getSection("data").get())
                 }
             }
     }

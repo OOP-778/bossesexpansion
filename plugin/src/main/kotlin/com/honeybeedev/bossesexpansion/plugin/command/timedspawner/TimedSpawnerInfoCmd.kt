@@ -1,14 +1,14 @@
-package com.honeybeedev.bossesexpansion.plugin.cmd.timedspawner
+package com.honeybeedev.bossesexpansion.plugin.command.timedspawner
 
 import com.honeybeedev.bossesexpansion.plugin.BossesExpansion
 import com.honeybeedev.bossesexpansion.plugin.constant.Lang
-import com.honeybeedev.bossesexpansion.plugin.controller.PlaceholderController
+import com.honeybeedev.bossesexpansion.plugin.util.Placeholders
 import com.oop.orangeengine.command.OCommand
 import com.oop.orangeengine.message.impl.OChatMessage
 import com.oop.orangeengine.message.impl.chat.ChatLine
 import com.oop.orangeengine.message.impl.chat.InsertableList
 
-class TimedSpawnerInfo : OCommand() {
+class TimedSpawnerInfoCmd : OCommand() {
     init {
         label("info")
         onCommand {
@@ -27,7 +27,7 @@ class TimedSpawnerInfo : OCommand() {
 
             for (timedSpawner in timedSpawners) {
                 val timedSpawnerLine = templateLine.clone()
-                PlaceholderController.replaceMessage(timedSpawnerLine, timedSpawner)
+                Placeholders.replaceMessage(timedSpawnerLine, timedSpawner)
 
                 lines.add(timedSpawnerLine)
             }

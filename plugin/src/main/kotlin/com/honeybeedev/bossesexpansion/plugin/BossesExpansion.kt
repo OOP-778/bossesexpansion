@@ -1,15 +1,16 @@
 package com.honeybeedev.bossesexpansion.plugin
 
 import com.honeybeedev.bossesexpansion.api.BossesExpansionAPI
-import com.honeybeedev.bossesexpansion.plugin.cmd.CommandRegistry
-import com.honeybeedev.bossesexpansion.plugin.controller.BossController
-import com.honeybeedev.bossesexpansion.plugin.controller.BossProviderController
-import com.honeybeedev.bossesexpansion.plugin.controller.ConfigController
-import com.honeybeedev.bossesexpansion.plugin.controller.HookController
+import com.honeybeedev.bossesexpansion.plugin.boss.BossController
+import com.honeybeedev.bossesexpansion.plugin.boss.BossProviderController
+import com.honeybeedev.bossesexpansion.plugin.command.CommandRegistry
+import com.honeybeedev.bossesexpansion.plugin.config.ConfigController
 import com.honeybeedev.bossesexpansion.plugin.event.BEventDispatcher
 import com.honeybeedev.bossesexpansion.plugin.handler.*
+import com.honeybeedev.bossesexpansion.plugin.hook.HookController
 import com.honeybeedev.bossesexpansion.plugin.hook.hooks.MythicMobsHook
-import com.honeybeedev.bossesexpansion.plugin.tasks.TimedSpawnerTask
+import com.honeybeedev.bossesexpansion.plugin.hook.hooks.WorldGuardHook
+import com.honeybeedev.bossesexpansion.plugin.task.TimedSpawnerTask
 import com.oop.orangeengine.main.plugin.EnginePlugin
 import com.oop.orangeengine.main.task.ClassicTaskController
 import com.oop.orangeengine.main.task.TaskController
@@ -47,7 +48,7 @@ class BossesExpansion : EnginePlugin(), com.honeybeedev.bossesexpansion.api.Boss
         CommandRegistry
 
         // Initialize hooks
-        hookController.registerHooks({ MythicMobsHook::class })
+        hookController.registerHooks({ MythicMobsHook::class }, { WorldGuardHook::class })
         TimedSpawnerTask()
     }
 

@@ -7,6 +7,7 @@ import com.oop.orangeengine.eventssubscription.SubscriptionProperties
 import com.oop.orangeengine.eventssubscription.subscription.SubscribedEvent
 import com.oop.orangeengine.main.events.SyncEvents
 import com.oop.orangeengine.main.task.OTask
+import com.oop.orangeengine.message.impl.OChatMessage
 import org.bukkit.event.Event
 import java.text.DecimalFormat
 
@@ -19,7 +20,7 @@ fun executeTask(
     repeat: Boolean = false,
     consumer: (OTask) -> Unit,
 
-): OTask {
+    ): OTask {
     val task = OTask()
     task.apply {
         task.sync(!async)
@@ -56,9 +57,22 @@ inline fun <reified T : BEEvent> dispatchListen(crossinline listener: (T).() -> 
         try {
             listener(it)
         } catch (err: Throwable) {
-            logger.error(IllegalStateException("Failed to dispatch listener by type `${T::class.simpleName}`", err))
+            logger.error(
+                IllegalStateException(
+                    "Failed to dispatch listener by type `${T::class.simpleName}`",
+                    err
+                )
+            )
         }
     }
 }
 
 val logger = BossesExpansion.instance!!.oLogger
+
+fun newChatMessage(): OChatMessage = OChatMessage()
+
+fun newChatMessage(consumer: (OChatMessage).() -> Unit): OChatMessage {
+    return newChatMessage().apply {
+        consumer(this)
+    }
+}

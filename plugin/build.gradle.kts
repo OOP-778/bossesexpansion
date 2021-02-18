@@ -11,7 +11,7 @@ version = "0.0.1"
 repositories {
     mavenLocal()
     mavenCentral()
-    maven(url="https://mvn.lumine.io/repository/maven-public/")
+    maven(url = "https://mvn.lumine.io/repository/maven-public/")
 }
 
 dependencies {
@@ -37,7 +37,7 @@ dependencies {
 
 tasks {
     named<ShadowJar>("shadowJar") {
-        destinationDirectory.set(file("/run/media/brian/BRABARAR/Serrvers/OOP/BossesExpansionTest/plugins/"))
+        destinationDirectory.set(file("/run/media/oop-778/BRABARAR/Serrvers/OOP/BossesExpansionTest/plugins/"))
         archiveFileName.set("BossesExpansion.jar")
 
         relocate("com.oop.orangengine", "com.honeybeedev.bossesexpansion.engine")

@@ -4,7 +4,7 @@ import com.honeybeedev.bossesexpansion.plugin.BossesExpansion
 import com.oop.orangeengine.main.logger.OLogger
 import com.oop.orangeengine.main.plugin.OComponent
 
-interface BEComponent : OComponent<BossesExpansion> {
+interface PluginComponent : OComponent<BossesExpansion> {
     val logger: OLogger
         get() = plugin.oLogger
 

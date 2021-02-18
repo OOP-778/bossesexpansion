@@ -2,7 +2,6 @@ package com.honeybeedev.bossesexpansion.plugin.config.timed
 
 import com.honeybeedev.bossesexpansion.plugin.util.WrappedNumber
 import com.honeybeedev.bossesexpansion.plugin.util.parseNumber
-import java.lang.IllegalStateException
 import java.util.regex.Pattern
 
 val boss = Pattern.compile("boss\\[([^,]*),([^]]+)\\]")

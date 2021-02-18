@@ -16,7 +16,6 @@ import java.util.*
 
 class TimedSpawner(val config: Config) {
     var timeLoader = TimeLoader(config)
-    var grouping: String? = null
     var broadcasts: MutableSet<TimedMessage> = mutableSetOf()
 
     var executingAt by NullableVar<ZonedDateTime>()
@@ -30,7 +29,10 @@ class TimedSpawner(val config: Config) {
             val lastTimer = section.getAs<Int>("timer")
 
             if (timeLoader.hash == lastHash) {
-                executingAt = ZonedDateTime.ofInstant(Instant.ofEpochSecond(lastTimer.toLong()), timeLoader.zone!!)
+                executingAt = ZonedDateTime.ofInstant(
+                    Instant.ofEpochSecond(lastTimer.toLong()),
+                    timeLoader.zone!!
+                )
                 if (Duration.between(timeLoader.current(), executingAt).seconds <= 0)
                     executingAt = timeLoader.next()
             }
@@ -38,7 +40,12 @@ class TimedSpawner(val config: Config) {
             executingAt = timeLoader.next()
 
             val cache = config.createSection("cache")
-            cache.comments.addAll(arrayListOf("Do not delete this", "This section holds data of time"))
+            cache.comments.addAll(
+                arrayListOf(
+                    "Do not delete this",
+                    "This section holds data of time"
+                )
+            )
 
             cache.set("lasthash", timeLoader.hash)
             cache.set("timer", executingAt!!.toEpochSecond())
@@ -50,11 +57,6 @@ class TimedSpawner(val config: Config) {
                 pointsProvider = WGPointsProvider(it)
             } else
                 throw prepareError(it, "Invalid points provider")
-        }
-
-        config.ifSectionPresent("grouping") {
-            if (it.getAs("enabled"))
-                grouping = it.getAs("lead")
         }
 
         config.ifSectionPresent("broadcasts") {

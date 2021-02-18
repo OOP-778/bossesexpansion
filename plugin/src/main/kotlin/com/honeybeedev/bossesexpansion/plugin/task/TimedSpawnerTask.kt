@@ -1,4 +1,4 @@
-package com.honeybeedev.bossesexpansion.plugin.tasks
+package com.honeybeedev.bossesexpansion.plugin.task
 
 import com.honeybeedev.bossesexpansion.plugin.BossesExpansion
 import com.oop.orangeengine.main.task.OTask

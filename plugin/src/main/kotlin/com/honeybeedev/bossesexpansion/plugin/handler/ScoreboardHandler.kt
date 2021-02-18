@@ -17,7 +17,12 @@ object ScoreboardHandler : PluginComponent {
     private val scoreboardMap: MutableMap<UUID, BossScoreboard> = Maps.newConcurrentMap()
 
     init {
-        executeTask("boss-sb-update", async = true, repeat = true, delay = TimeUnit.SECONDS.toMillis(1).toInt()) {
+        executeTask(
+            "boss-sb-update",
+            async = true,
+            repeat = true,
+            delay = TimeUnit.SECONDS.toMillis(1).toInt()
+        ) {
             for (sbEntry in scoreboardMap.entries) {
                 // Update lines
                 sbEntry.value.updateLines()

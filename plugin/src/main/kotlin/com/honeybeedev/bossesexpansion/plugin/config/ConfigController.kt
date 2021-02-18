@@ -1,17 +1,17 @@
-package com.honeybeedev.bossesexpansion.plugin.controller
+package com.honeybeedev.bossesexpansion.plugin.config
 
 import com.honeybeedev.bossesexpansion.plugin.BossesExpansion
 import com.honeybeedev.bossesexpansion.plugin.config.group.BossGroup
 import com.honeybeedev.bossesexpansion.plugin.config.main.MainConfig
 import com.honeybeedev.bossesexpansion.plugin.config.reward.BeReward
 import com.honeybeedev.bossesexpansion.plugin.config.timed.TimedSpawner
-import com.honeybeedev.bossesexpansion.plugin.util.BEComponent
+import com.honeybeedev.bossesexpansion.plugin.util.PluginComponent
 import com.oop.orangeengine.file.OFile
 import com.oop.orangeengine.main.util.JarUtil
 import com.oop.orangeengine.yaml.Config
 import java.io.File
 
-class ConfigController : BEComponent {
+class ConfigController : PluginComponent {
     val groups: MutableMap<String, BossGroup> = hashMapOf()
     val rewards: MutableMap<String, BeReward> = hashMapOf()
     val timedSpawners: MutableMap<String, TimedSpawner> = hashMapOf()
@@ -47,7 +47,8 @@ class ConfigController : BEComponent {
         loadFiles("timedspawn") {
             try {
                 val timedSpawnerConfig = Config(it)
-                timedSpawners[it.nameWithoutExtension.toLowerCase()] = TimedSpawner(timedSpawnerConfig)
+                timedSpawners[it.nameWithoutExtension.toLowerCase()] =
+                    TimedSpawner(timedSpawnerConfig)
                 timedSpawnerConfig.save()
             } catch (ex: Throwable) {
                 throw IllegalStateException("Failed to load timed spawner in file ${it.name}", ex)

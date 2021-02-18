@@ -1,6 +1,6 @@
 package com.honeybeedev.bossesexpansion.plugin.player
 
-import java.util.UUID
+import java.util.*
 
 data class ExpansionPlayer(
     val uuid: UUID,

@@ -1,13 +1,15 @@
-package com.honeybeedev.bossesexpansion.plugin.controller
+package com.honeybeedev.bossesexpansion.plugin.boss
 
 import com.honeybeedev.bossesexpansion.api.boss.BossProvider
-import com.honeybeedev.bossesexpansion.api.controller.BossProviderController
-import com.honeybeedev.bossesexpansion.plugin.util.BEComponent
+import com.honeybeedev.bossesexpansion.api.boss.BossProviderController
+import com.honeybeedev.bossesexpansion.plugin.util.PluginComponent
 import org.bukkit.Location
+import org.bukkit.entity.Entity
 import java.util.*
 import java.util.stream.Collectors
 
-class BossProviderController : BEComponent, BossProviderController {
+class BossProviderController : PluginComponent,
+    BossProviderController {
     private val providers: MutableSet<BossProvider> = HashSet()
 
     override fun registerProvider(provider: BossProvider) {
@@ -15,14 +17,14 @@ class BossProviderController : BEComponent, BossProviderController {
         providers.add(provider)
     }
 
-    fun findSpawnProvider(bossId: String): ((Location) -> Unit)? {
+    fun findSpawnProvider(bossId: String): ((Location) -> Entity)? {
         val provider = providers
             .map { it.provideSpawner(bossId) }
             .firstOrNull()
             ?: return null
 
         return {
-            provider.accept(it)
+            provider.apply(it)
         }
     }
 
