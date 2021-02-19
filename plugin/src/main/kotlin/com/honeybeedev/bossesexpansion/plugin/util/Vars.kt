@@ -11,7 +11,6 @@ class NullableVar<T : Any> : ReadWriteProperty<Any?, T?> {
 
     override fun getValue(thisRef: Any?, property: KProperty<*>): T? {
         return value
-            ?: throw IllegalStateException("Property ${property.name} should be initialized before get.")
     }
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {

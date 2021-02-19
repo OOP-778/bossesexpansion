@@ -25,32 +25,22 @@ class TimedSpawner(val config: Config) {
     init {
         if (config.isSectionPresent("cache")) {
             val section = config.getSection("cache").get()
-            val lastHash = section.getAs<Int>("lasthash")
-            val lastTimer = section.getAs<Int>("timer")
+            val lastHash = section.getAs<Int>("hash")
+            val lastTimer = section.getAs("timer", Long::class.java)
 
             if (timeLoader.hash == lastHash) {
                 executingAt = ZonedDateTime.ofInstant(
-                    Instant.ofEpochSecond(lastTimer.toLong()),
+                    Instant.ofEpochSecond(lastTimer),
                     timeLoader.zone!!
                 )
-                if (Duration.between(timeLoader.current(), executingAt).seconds <= 0)
+
+                if (Duration.between(timeLoader.current(), executingAt).seconds <= 0) {
                     executingAt = timeLoader.next()
+                }
             }
-        } else {
-            executingAt = timeLoader.next()
-
-            val cache = config.createSection("cache")
-            cache.comments.addAll(
-                arrayListOf(
-                    "Do not delete this",
-                    "This section holds data of time"
-                )
-            )
-
-            cache.set("lasthash", timeLoader.hash)
-            cache.set("timer", executingAt!!.toEpochSecond())
         }
 
+        updateConfigCache()
         config.ifSectionPresent("points") {
             val type = it.getAs<String>("type")
             if (type.equals("worldguard", true)) {
@@ -72,6 +62,23 @@ class TimedSpawner(val config: Config) {
         }
     }
 
+    fun updateConfigCache() {
+        if (executingAt == null)
+            executingAt = timeLoader.next()
+
+        val cache = config.createSection("cache")
+        if (cache.comments.isEmpty())
+            cache.comments.addAll(
+                arrayListOf(
+                    "Do not delete this",
+                    "This section holds data of time"
+                )
+            )
+
+        cache.set("hash", timeLoader.hash)
+        cache.set("timer", executingAt!!.toEpochSecond())
+    }
+
     fun left(): String =
         leftComplex(Duration.between(timeLoader.current(), executingAt).seconds)
 
@@ -86,6 +93,8 @@ class TimedSpawner(val config: Config) {
 
         if (runningIn <= 1) {
             executingAt = timeLoader.next()
+            updateConfigCache()
+
             pointsProvider?.let {
                 val bossesSpawning = bosses
                     .map { Pair(it.first.getter(), it.second) }
