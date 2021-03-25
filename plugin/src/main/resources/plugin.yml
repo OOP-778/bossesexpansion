@@ -4,7 +4,8 @@ version: 1.0
 author: OOP-778 @ honeybeedev.com
 
 depend:
-  - MythicMobs
+  - WorldGuard
 
 softdepend:
-  - WorldGuard
+  - MythicMobs
+  - Boss
