@@ -50,7 +50,6 @@ object SummaryHandler : PluginComponent {
                         it.summaryMessage!!.colors!![pos] ?: it.summaryMessage!!.defaultColor
 
                     val damagerLine = damagerPlaceholderLine.clone()
-                    println(damagerLine.raw())
                     damagerLine
                         .replace("%position%", pos)
                         .replace("%position_color%", color!!)

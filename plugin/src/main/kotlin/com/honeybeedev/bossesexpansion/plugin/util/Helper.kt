@@ -71,7 +71,7 @@ val logger = BossesExpansion.instance!!.oLogger
 
 fun newChatMessage(): OChatMessage = OChatMessage()
 
-fun newChatMessage(consumer: (OChatMessage).() -> Unit): OChatMessage {
+fun newChatMessage(consumer: OChatMessage.() -> Unit): OChatMessage {
     return newChatMessage().apply {
         consumer(this)
     }

@@ -29,7 +29,6 @@ class TimeLoader(section: Config) {
 
         val calculateTime = calculateTime(toSeconds(_time))
         timeModifier = {
-            println(calculateTime.contentToString())
             it.plusHours(calculateTime[2])
                 .plusMinutes(calculateTime[1])
                 .plusSeconds(calculateTime[0])

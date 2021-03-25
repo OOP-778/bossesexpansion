@@ -61,7 +61,6 @@ object ReceiversSuppliers {
             matcher.find()
 
             var matches = Array(matcher.groupCount()) { "" }
-            println(matcher.groupCount())
             for (i in 1..matcher.groupCount()) {
                 matches[i - 1] = matcher.group(i)
             }
