@@ -14,6 +14,8 @@ data class BBoss(val entity: Entity, val _provider: BossProvider) : Boss {
     val children: Queue<Entity> = LinkedList()
     var bossGroup: BossGroup? = null
 
+    var playersTeleported: MutableMap<UUID, Int> = mutableMapOf()
+
     var damageMap: MutableMap<UUID, BossDamager> = ConcurrentHashMap()
     private var _totalDamage: Double = 0.0
 

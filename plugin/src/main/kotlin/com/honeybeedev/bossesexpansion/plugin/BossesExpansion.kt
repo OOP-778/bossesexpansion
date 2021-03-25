@@ -8,6 +8,7 @@ import com.honeybeedev.bossesexpansion.plugin.config.ConfigController
 import com.honeybeedev.bossesexpansion.plugin.event.BEventDispatcher
 import com.honeybeedev.bossesexpansion.plugin.handler.*
 import com.honeybeedev.bossesexpansion.plugin.hook.HookController
+import com.honeybeedev.bossesexpansion.plugin.hook.hooks.KangarkoBossHook
 import com.honeybeedev.bossesexpansion.plugin.hook.hooks.MythicMobsHook
 import com.honeybeedev.bossesexpansion.plugin.hook.hooks.WorldGuardHook
 import com.honeybeedev.bossesexpansion.plugin.task.TimedSpawnerTask
@@ -25,6 +26,7 @@ class BossesExpansion : EnginePlugin(), com.honeybeedev.bossesexpansion.api.Boss
 
     override fun enable() {
         instance = this
+        hookController.registerHooks({ MythicMobsHook::class }, { WorldGuardHook::class }, { KangarkoBossHook::class })
 
         oLogger
             .mainColor = "&a"
@@ -33,7 +35,6 @@ class BossesExpansion : EnginePlugin(), com.honeybeedev.bossesexpansion.api.Boss
             .secondaryColor = "&2"
 
         BossesExpansionAPI.set(this)
-        oLogger.isDebugMode = true
 
         pluginComponentController
             .add(configController, true)
@@ -48,7 +49,6 @@ class BossesExpansion : EnginePlugin(), com.honeybeedev.bossesexpansion.api.Boss
         CommandRegistry
 
         // Initialize hooks
-        hookController.registerHooks({ MythicMobsHook::class }, { WorldGuardHook::class })
         TimedSpawnerTask()
     }
 

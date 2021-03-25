@@ -27,7 +27,7 @@ dependencies {
     implementation("com.oop.orangeengine:eventssubscription:5.3")
     implementation("com.oop.orangeengine:message:5.3")
     implementation(project(":api"))
-    implementation(fileTree("../lib"))
+    compileOnly(fileTree("../lib"))
 
     implementation("com.oop.inteliframework:scoreboard:1.0")
 
