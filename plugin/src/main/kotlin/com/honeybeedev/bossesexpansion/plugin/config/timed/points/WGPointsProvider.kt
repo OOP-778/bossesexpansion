@@ -1,6 +1,8 @@
 package com.honeybeedev.bossesexpansion.plugin.config.timed.points
 
 import com.google.common.collect.Sets
+import com.honeybeedev.bossesexpansion.plugin.BossesExpansion
+import com.honeybeedev.bossesexpansion.plugin.hook.hooks.WorldGuardHook
 import com.honeybeedev.bossesexpansion.plugin.util.getChunkPairsBetween
 import com.honeybeedev.bossesexpansion.plugin.util.logger
 import com.oop.orangeengine.main.task.StaticTask
@@ -9,8 +11,9 @@ import org.apache.commons.lang.mutable.MutableBoolean
 import org.bukkit.ChunkSnapshot
 import org.bukkit.Location
 import org.bukkit.World
-import org.codemc.worldguardwrapper.WorldGuardWrapper
 import org.codemc.worldguardwrapper.region.IWrappedRegion
+import org.codemc.worldguardwrapper.selection.ICuboidSelection
+import org.codemc.worldguardwrapper.selection.IPolygonalSelection
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ThreadLocalRandom
 import java.util.stream.IntStream
@@ -26,15 +29,33 @@ class WGPointsProvider(val section: ConfigSection) : PointsProvider(section) {
     private val regionName: String = section.getAs("value")
 
     init {
-        region = WorldGuardWrapper.getInstance().regions
+        region = BossesExpansion.instance!!.hookController.findHook { WorldGuardHook::class }.get()
+            .getRegions()
             .firstOrNull { it.id.toString().contentEquals(regionName) }
             ?: throw IllegalStateException("Failed to find region by $regionName")
 
-        world = region.selection.world
-        maxPoint =
-            Location(world, region.maximumPoint.x, region.maximumPoint.y, region.maximumPoint.z)
-        minPoint =
-            Location(world, region.minimumPoint.x, region.minimumPoint.y, region.minimumPoint.z)
+        world =
+            if (region.selection is ICuboidSelection) (region.selection as ICuboidSelection).maximumPoint.world else
+                (region.selection as IPolygonalSelection).points.first().world
+
+        if (region.selection is ICuboidSelection) {
+            val selection = (region.selection as ICuboidSelection)
+
+            maxPoint =
+                Location(
+                    world,
+                    selection.maximumPoint.x,
+                    selection.maximumPoint.y,
+                    selection.maximumPoint.z
+                )
+            minPoint =
+                Location(
+                    world,
+                    selection.minimumPoint.x,
+                    selection.minimumPoint.y,
+                    selection.minimumPoint.z
+                )
+        } else throw java.lang.IllegalStateException("Polygon selections are not supported yet!")
     }
 
     override fun provide(parallel: Boolean, amount: Int): CompletableFuture<Collection<Location>> {
