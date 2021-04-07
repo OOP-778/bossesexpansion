@@ -25,6 +25,8 @@ points:
   type: worldguard
 
   # Value of the defined type
+  # region:world
+  # or just region
   value: "warzone"
 
 # Which bosses will it spawn?

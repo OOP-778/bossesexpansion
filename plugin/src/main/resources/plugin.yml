@@ -1,5 +1,5 @@
 name: BossesExpansion
-main: com.honeybeedev.bossesexpansion.plugin.BossesExpansion
+main: org.royalix.bossesexpansion.BELoader
 version: 1.0
 author: OOP-778 @ honeybeedev.com
 
